@@ -14,8 +14,10 @@
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="malassezia-checker-config" />
-        <error-handler>
+        <logger level="INFO" doc:name="Start Log" doc:id="2133e834-1e6f-446e-bad8-e896b006e108" message='#[%dw 2.0&#10;output application/json&#10;---&#10;START: message update {&#10;	case .payload -&gt;&#10;      if ( payload is Object ) if ( sizeOf(payload as String) &gt;= 200 ) (payload as String)[0 to 199] ++ "..."&#10;    else&#10;      payload&#10;      else if ( payload is Array ) if ( sizeOf(payload ) &gt;= 10 ) (payload[0 to 9]) ++ ["..."] else payload&#10;      else&#10;        payload&#10;}]'/>
+		<apikit:router config-ref="malassezia-checker-config" />
+        <logger level="INFO" doc:name="End Log" doc:id="575b22a0-b8f1-4dee-8e49-3cf8e8b8cd72" message='#[%dw 2.0&#10;output application/json&#10;---&#10;END: message update {&#10;	case .payload -&gt;&#10;      if ( payload is Object ) if ( sizeOf(payload as String) &gt;= 200 ) (payload as String)[0 to 199] ++ "..."&#10;    else&#10;      payload&#10;      else if ( payload is Array ) if ( sizeOf(payload ) &gt;= 10 ) (payload[0 to 9]) ++ ["..."] else payload&#10;      else&#10;        payload&#10;}]'/>
+		<error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
                 <ee:transform doc:name="Transform Message">
                     <ee:message>
@@ -124,50 +126,11 @@ output application/json
         </error-handler>
     </flow>
     <flow name="get:\malassezia-checker\brands:malassezia-checker-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    name: "BrandA"
-  }, 
-  {
-    name: "BrandB"
-  }, 
-  {
-    name: "BrandC"
-  }
-] as Array {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="get-brands-main" doc:id="13a1707d-c3e2-40f5-a681-8198c79263c6" name="get-brands-main"/>
     </flow>
     <flow name="get:\malassezia-checker\brands\(brandName)\products:malassezia-checker-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:variables>
-                <ee:set-variable variableName="brandName">attributes.uriParams.'brandName'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    id: "p001",
-    name: "Gentle Cleanser",
-    brand: "BrandA"
-  }, 
-  {
-    id: "p002",
-    name: "Exfoliant",
-    brand: "BrandB"
-  }
-] as Array {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<set-variable value="#[attributes.uriParams.brandName]" doc:name="brandNameUriParam" doc:id="e2209bf1-f774-45e2-bb94-036f224e171f" variableName="brandNameUriParam"/>
+		<flow-ref doc:name="get-brands-brandName-products-main" doc:id="6e134e94-3fd1-4a9b-8cb0-747665d4f067" name="get-brands-brandName-products-main" />
     </flow>
     <flow name="get:\malassezia-checker\products\(productId):malassezia-checker-config">
         <ee:transform doc:name="Transform Message">

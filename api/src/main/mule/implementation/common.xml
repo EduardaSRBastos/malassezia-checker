@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<sub-flow name="get-products" doc:id="27ea8282-78d2-425f-9aa8-6838f75e4db8" >
+		<logger level="INFO" doc:name="Request Log" doc:id="1717a521-83f4-44b5-9c68-4674d3282b40" message='#[%dw 2.0&#10;output application/json&#10;---&#10;REQUEST: filePath: "${app.home}/products.csv"]' />
+		<file:read doc:name="products.csv" doc:id="6317eecd-8642-4d46-9e9f-6a37dad28cce" path="${app.home}/products.csv" outputMimeType='application/csv; ignoreemptyline=true; separator=";"; header=true' />
+		<logger level="INFO" doc:name="Response Log" doc:id="7bfffc65-c557-43a5-9fcf-477af054f910" message='#[%dw 2.0&#10;output application/json&#10;---&#10;RESPONSE: message update {&#10;	case .payload -&gt;&#10;      if ( payload is Object ) if ( sizeOf(payload as String) &gt;= 200 ) (payload as String)[0 to 199] ++ "..."&#10;    else&#10;      payload&#10;      else if ( payload is Array ) if ( sizeOf(payload ) &gt;= 10 ) (payload[0 to 9]) ++ ["..."] else payload&#10;      else&#10;        payload&#10;}]' />
+	</sub-flow>
+</mule>
