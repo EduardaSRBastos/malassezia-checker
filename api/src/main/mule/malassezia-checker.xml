@@ -133,34 +133,8 @@ output application/json
 		<flow-ref doc:name="get-brands-brandName-products-main" doc:id="6e134e94-3fd1-4a9b-8cb0-747665d4f067" name="get-brands-brandName-products-main" />
     </flow>
     <flow name="get:\malassezia-checker\products\(productId):malassezia-checker-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:variables>
-                <ee:set-variable variableName="productId">attributes.uriParams.'productId'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  id: "p001",
-  name: "Gentle Cleanser",
-  brand: "BrandA",
-  imageUrl: "https://example.com/images/gentle-cleanser.jpg",
-  ingredients: [
-    {
-      name: "Water",
-      isBad: false
-    }, 
-    {
-      name: "Lauric Acid",
-      isBad: true
-    }
-  ]
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+        <set-variable value="#[attributes.uriParams.productId]" doc:name="productIdUriParam" doc:id="8c545004-0750-4d5d-bd58-7e689f8d99a2" variableName="productIdUriParam" />
+		<flow-ref doc:name="get-products-productId-main" doc:id="f12ebcf7-645b-4371-a21f-14be766b79ec" name="get-products-productId-main" />
     </flow>
     <flow name="post:\malassezia-checker\ingredients:application\json:malassezia-checker-config">
         <ee:transform doc:name="Transform Message">
