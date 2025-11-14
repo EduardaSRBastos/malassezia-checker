@@ -1,5 +1,0 @@
-%dw 2.0
-
-type auto_27ea8282_78d2_425f_9aa8_6838f75e4db8_Output_Attributes = {|  |} {"typeAlias": "FileAttributes",
-"typeId": "org.mule.extension.file.common.api.FileAttributes"}
-
