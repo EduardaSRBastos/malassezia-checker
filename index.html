@@ -2,39 +2,76 @@
 <html lang="en">
 
 <head>
-  <title>Web Project Template</title>
+  <title>Malassezia Checker</title>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Web Project Template Repository" />
-  <meta name="keywords" content="Web Project Template, Repository Template" />
+  <meta name="description" content="Malassezia Checker Repository" />
+  <meta name="keywords" content="Malassezia Checker, Malassezia" />
   <meta name="author" content="Eduarda Bastos" />
-  <meta name="theme-color" content="#000000" />
+  <meta name="theme-color" content="#71ad85" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 
-  <meta property="og:title" content="Web Project Template" />
-  <meta property="og:description" content="Web Project Template Repository" />
+  <meta property="og:title" content="Malassezia Checker" />
+  <meta property="og:description" content="Malassezia Checker Repository" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://eduardasrbastos.github.io/repository-template" />
-  <meta property="og:image" content="https://eduardasrbastos.github.io/repository-template/assets/images/preview.png" />
+  <meta property="og:url" content="https://eduardasrbastos.github.io/malassezia-checker" />
+  <meta property="og:image" content="https://eduardasrbastos.github.io/malassezia-checker/assets/images/preview.png" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Web Project Template" />
-  <meta name="twitter:description" content="Web Project Template Repository" />
-  <meta name="twitter:image"
-    content="https://eduardasrbastos.github.io/repository-template/assets/images/preview.png" />
+  <meta name="twitter:title" content="Malassezia Checker" />
+  <meta name="twitter:description" content="Malassezia Checker Repository" />
+  <meta name="twitter:image" content="https://eduardasrbastos.github.io/malassezia-checker/assets/images/preview.png" />
 
-  <link rel="canonical" href="https://eduardasrbastos.github.io/repository-template" />
+  <link rel="canonical" href="https://eduardasrbastos.github.io/malassezia-checker" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    rel="stylesheet">
 </head>
 
 <body>
   <header role="banner">
-    <h1>Web Project Template</h1>
+    <h1>Malassezia Checker</h1>
   </header>
 
-  <main role="main"></main>
+  <main role="main">
+    <div class="grid-container">
+      <div class="ingredients-container">
+        <label for="ingredients-txtarea">Ingredients</label>
+        <textarea name="ingredients-txtarea" id="ingredients-txtarea" placeholder="Enter ingredients separated by comma"
+          maxlength="1000"></textarea>
+      </div>
+
+      <span class="separator">Or</span>
+
+      <div class="products-container">
+        <div class="brand-container">
+          <label for="brand-select">Brands</label>
+          <select name="brand-select" id="brand-select">
+            <option value="Brand1">Brand1</option>
+          </select>
+        </div>
+
+        <div class="product-container">
+          <label for="product-select">Product</label>
+          <select name="product-select" id="product-select">
+            <option value="Product1">Product1</option>
+          </select>
+        </div>
+
+      </div>
+      <div class="ingredients-list-container">
+        <label for="ingredients-list">Ingredients</label>
+        <span class="ingredients-list">Ingredient1, ingredient2</span>
+      </div>
+
+      <button class="check-btn">Check</button>
+    </div>
+  </main>
 
   <footer role="contentinfo">
     © <span id="year"></span>

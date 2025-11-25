@@ -1,16 +1,111 @@
 :root {
-  --main-color: #ffffff;
-  --second-color: #000000;
+  --main-color: #71ad85;
+  --second-color: #1b6433;
+  --third-color: #d9ffe6;
 }
 
 html {
   scrollbar-color: var(--second-color) var(--main-color);
   min-height: 100%;
   min-width: 100%;
+  font-family: "Playfair Display", serif;
+  background: var(--third-color);
 }
 
 body {
   margin: 0;
+  text-align: center;
+}
+
+header {
+  margin-top: 30px;
+  font-size: 20px;
+  color: var(--second-color);
+}
+
+.grid-container {
+  display: grid;
+  margin-top: 80px;
+}
+
+.ingredients-container {
+  display: grid;
+  width: 50%;
+  margin: auto;
+}
+
+label {
+  margin-bottom: 10px;
+  font-size: 22px;
+  color: var(--second-color);
+}
+
+#ingredients-txtarea {
+  height: 100px;
+  font-family: "Playfair Display", serif;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid var(--main-color);
+  box-shadow: 1px 1px 5px var(--second-color);
+}
+
+#ingredients-txtarea:focus {
+  outline: 2px solid var(--main-color);
+}
+
+.separator {
+  margin: 30px 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.products-container {
+  display: flex;
+  margin: 0 60px;
+}
+
+.brand-container,
+.product-container,
+.ingredients-list-container {
+  display: grid;
+  margin: auto;
+}
+
+#brand-select,
+#product-select {
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  background: var(--main-color);
+  border-radius: 20px;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.ingredients-list-container {
+  margin: 30px 0;
+}
+
+.check-btn {
+  margin: 30px auto;
+  padding: 15px 30px;
+  font-family: "Playfair Display", serif;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  color: white;
+  background: var(--second-color);
+  width: fit-content;
+  cursor: pointer;
+  border-radius: 25px;
+  border: none;
+  box-shadow: 2px 2px 5px var(--second-color);
+}
+
+.check-btn:hover {
+  box-shadow: 4px 4px 3px var(--second-color),
+    inset 2px 2px 3px var(--second-color);
 }
 
 footer {
