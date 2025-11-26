@@ -25,7 +25,7 @@ header {
 
 .grid-container {
   display: grid;
-  margin-top: 80px;
+  margin-top: 30px;
 }
 
 .ingredients-container {
@@ -54,7 +54,7 @@ label {
 }
 
 .separator {
-  margin: 30px 0;
+  margin: 30px 0 10px 0;
   font-size: 20px;
   font-weight: bold;
 }
@@ -71,8 +71,13 @@ label {
   margin: auto;
 }
 
-#brand-select,
-#product-select {
+.custom-select {
+  position: relative;
+  width: 100%;
+}
+
+#brand-input,
+#product-input {
   font-family: "Playfair Display", serif;
   font-size: 18px;
   background: var(--main-color);
@@ -81,10 +86,47 @@ label {
   color: white;
   padding: 10px 20px;
   cursor: pointer;
+  text-align: center;
+}
+
+#product-input.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: #666;
+}
+
+.options-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--main-color);
+  border-radius: 10px;
+  margin-top: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  z-index: 1000;
+}
+
+.option-item {
+  padding: 10px 20px;
+  color: white;
+  cursor: pointer;
+}
+
+.option-item:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .ingredients-list-container {
   margin: 30px 0;
+}
+
+.ingredients-list {
+  width: 65%;
+  text-align: justify;
+  margin: auto;
 }
 
 .check-btn {

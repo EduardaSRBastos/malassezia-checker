@@ -50,23 +50,26 @@
 
       <div class="products-container">
         <div class="brand-container">
-          <label for="brand-select">Brands</label>
-          <select name="brand-select" id="brand-select">
-            <option value="Brand1">Brand1</option>
-          </select>
+          <label for="brand-input">Brands</label>
+          <div class="custom-select">
+            <input type="text" id="brand-input" placeholder="Select or type brand">
+            <div id="brand-list" class="options-list"></div>
+          </div>
         </div>
 
         <div class="product-container">
           <label for="product-select">Product</label>
-          <select name="product-select" id="product-select">
-            <option value="Product1">Product1</option>
-          </select>
+          <div class="custom-select">
+            <input type="text" id="product-input" placeholder="Select or type product" disabled
+              title="Please select a brand first">
+            <div id="product-list" class="options-list"></div>
+          </div>
         </div>
 
       </div>
       <div class="ingredients-list-container">
         <label for="ingredients-list">Ingredients</label>
-        <span class="ingredients-list">Ingredient1, ingredient2</span>
+        <span class="ingredients-list"></span>
       </div>
 
       <button class="check-btn">Check</button>
