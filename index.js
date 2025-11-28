@@ -20,6 +20,7 @@ const resultsContainer = document.querySelector(".results-container");
 productInput.disabled = true;
 productInput.classList.add("disabled");
 
+// Get data from mulesoft API
 async function fetchJSON(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch ${url}`);
@@ -139,7 +140,7 @@ checkBtn.addEventListener("click", async () => {
   resultsContainer.style.margin = "30px 0";
 
   try {
-    // Case 1: Product selected → GET /products/:id
+    // Case 1: Product selected → GET /products/:productId
     if (selectedProductId) {
       const data = await fetchJSON(`${BASE_URL}/products/${selectedProductId}`);
       displayResults(data[0].ingredients);

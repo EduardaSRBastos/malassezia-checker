@@ -74,6 +74,7 @@ label {
 .custom-select {
   position: relative;
   width: 100%;
+  text-transform: capitalize;
 }
 
 #brand-input,
@@ -87,6 +88,7 @@ label {
   padding: 10px 20px;
   cursor: pointer;
   text-align: center;
+  text-transform: capitalize;
 }
 
 #product-input:disabled,
