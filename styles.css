@@ -1,20 +1,30 @@
 :root {
   --main-color: #71ad85;
   --second-color: #1b6433;
-  --third-color: #d9ffe6;
+  --third-color: #e5ffee;
 }
 
 html {
+  height: 100%;
+  margin: 0;
   scrollbar-color: var(--second-color) var(--main-color);
   min-height: 100%;
   min-width: 100%;
   font-family: "Playfair Display", serif;
-  background: var(--third-color);
+  background: linear-gradient(var(--third-color), #d9ffe6);
 }
 
 body {
+  min-height: 100%;
   margin: 0;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(var(--third-color), #d9ffe6);
+}
+
+main {
+  flex: 1;
 }
 
 header {
@@ -25,7 +35,7 @@ header {
 
 .grid-container {
   display: grid;
-  margin-top: 30px;
+  margin: 40px auto 0 auto;
 }
 
 .ingredients-container {
@@ -45,7 +55,7 @@ label {
   font-family: "Playfair Display", serif;
   border-radius: 10px;
   padding: 10px;
-  border: 1px solid var(--main-color);
+  border: 1px solid white;
   box-shadow: 2px 2px 5px var(--second-color);
 }
 
@@ -92,6 +102,11 @@ label {
   box-shadow: 2px 2px 5px var(--second-color);
 }
 
+#brand-input:focus,
+#product-input:focus {
+  outline: 2px solid var(--second-color);
+}
+
 #product-input:disabled,
 .check-btn:disabled,
 .check-btn:disabled:hover {
@@ -129,6 +144,7 @@ label {
 .ingredients-list-container,
 .results-container {
   opacity: 0;
+  height: 0;
 }
 
 .ingredients-list,
@@ -139,7 +155,7 @@ label {
 }
 
 .check-btn {
-  margin: 10px auto;
+  margin: 50px auto 10px auto;
   padding: 15px 30px;
   font-family: "Playfair Display", serif;
   font-size: 20px;
@@ -176,6 +192,7 @@ label {
   overflow: hidden;
   text-transform: capitalize;
   box-shadow: 2px 2px 5px var(--second-color);
+  border: 1px solid white;
 }
 
 .results-container th {
@@ -189,6 +206,11 @@ label {
 .results-container td {
   border: 1px solid var(--second-color);
   padding: 8px;
+  border: none;
+}
+
+.results-container table tr:nth-child(even) {
+  background: white;
 }
 
 .results-container th:first-child {
@@ -226,10 +248,10 @@ label {
 
 footer {
   text-align: center;
-  position: relative;
-  margin-bottom: 15px;
+  padding: 15px 0;
   width: 100%;
   font-size: 16px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
