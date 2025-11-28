@@ -61,7 +61,7 @@ label {
 
 .products-container {
   display: flex;
-  margin: 0 60px;
+  margin: 0 14%;
 }
 
 .brand-container,
@@ -89,10 +89,14 @@ label {
   text-align: center;
 }
 
-#product-input.disabled {
+#product-input:disabled,
+.check-btn:disabled,
+.check-btn:disabled:hover {
   background-color: #ccc;
+  box-shadow: none;
   cursor: not-allowed;
   color: #666;
+  opacity: 0.5;
 }
 
 .options-list {
@@ -119,18 +123,20 @@ label {
   background: rgba(255, 255, 255, 0.2);
 }
 
-.ingredients-list-container {
-  margin: 30px 0;
+.ingredients-list-container,
+.results-container {
+  opacity: 0;
 }
 
-.ingredients-list {
-  width: 65%;
+.ingredients-list,
+.results {
+  width: 50%;
   text-align: justify;
   margin: auto;
 }
 
 .check-btn {
-  margin: 30px auto;
+  margin: 10px auto;
   padding: 15px 30px;
   font-family: "Playfair Display", serif;
   font-size: 20px;
@@ -150,10 +156,74 @@ label {
     inset 2px 2px 3px var(--second-color);
 }
 
+.results-container {
+  display: grid;
+}
+
+.results {
+  text-align: center;
+  font-size: 17px;
+}
+
+.results-container table {
+  margin: 20px auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 15px;
+  overflow: hidden;
+  text-transform: capitalize;
+}
+
+.results-container th {
+  background: var(--main-color);
+  font-weight: bold;
+  color: white;
+  font-size: 17px;
+}
+
+.results-container th,
+.results-container td {
+  border: 1px solid var(--second-color);
+  padding: 8px;
+}
+
+.results-container th:first-child {
+  border-top-left-radius: 15px;
+}
+.results-container th:last-child {
+  border-top-right-radius: 15px;
+}
+
+.results-container tr:last-child td:first-child {
+  border-bottom-left-radius: 15px;
+}
+.results-container tr:last-child td:last-child {
+  border-bottom-right-radius: 15px;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legend-dot.red {
+  background-color: red;
+}
+
+.legend-dot.orange {
+  background-color: orange;
+}
+
+.legend-dot.yellow {
+  background-color: yellow;
+}
+
 footer {
   text-align: center;
-  position: absolute;
-  bottom: 15px;
+  position: relative;
+  margin-bottom: 15px;
   width: 100%;
   font-size: 16px;
 }
