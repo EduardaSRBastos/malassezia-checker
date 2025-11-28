@@ -46,7 +46,7 @@ label {
   border-radius: 10px;
   padding: 10px;
   border: 1px solid var(--main-color);
-  box-shadow: 1px 1px 5px var(--second-color);
+  box-shadow: 2px 2px 5px var(--second-color);
 }
 
 #ingredients-txtarea:focus {
@@ -89,6 +89,7 @@ label {
   cursor: pointer;
   text-align: center;
   text-transform: capitalize;
+  box-shadow: 2px 2px 5px var(--second-color);
 }
 
 #product-input:disabled,
@@ -174,6 +175,7 @@ label {
   border-radius: 15px;
   overflow: hidden;
   text-transform: capitalize;
+  box-shadow: 2px 2px 5px var(--second-color);
 }
 
 .results-container th {

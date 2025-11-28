@@ -6,6 +6,6 @@
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
 	<sub-flow name="get-brands-brandName-products-main" doc:id="c03ddb49-efac-423a-b4ea-e89b6b37203b" >
 		<flow-ref doc:name="get-products" doc:id="686bf3ce-1e93-4324-bd68-70b2c884d99d" name="get-products"/>
-		<set-payload value='#[output application/json&#10;---&#10;payload filter lower($.brands_en) == lower(vars.brandNameUriParam) and $.product_name != "" map {&#10;	id: $.id,&#10;	name: $.product_name,&#10;	brand: $.brands_en,&#10;	ingredients: $.ingredients_text replace "." with ""&#10;}]' doc:name="Response Output" doc:id="e27d97c3-0c7f-42ed-8ebe-03f2ccd9b85a" />
+		<set-payload value='#[%dw 2.0&#10;import remove from dw::core::Strings&#10;output application/json&#10;---&#10;payload filter lower($.brands_en) == lower(vars.brandNameUriParam) and $.product_name != "" map {&#10;	id: $.id,&#10;	name: $.product_name,&#10;	brand: $.brands_en,&#10;	ingredients: $.ingredients_text replace "." with "" splitBy "," map trim($) joinBy ", "&#10;}]' doc:name="Response Output" doc:id="e27d97c3-0c7f-42ed-8ebe-03f2ccd9b85a" />
 	</sub-flow>
 </mule>
