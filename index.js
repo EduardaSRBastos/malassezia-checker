@@ -81,6 +81,7 @@ function selectProduct(product) {
   productList.style.display = "none";
   ingredientsSpan.textContent = product.ingredients.normalize("NFC");
   ingredientsListContainer.style.opacity = "1";
+  ingredientsListContainer.style.height = "fit-content";
   ingredientsListContainer.style.margin = "30px 0";
   selectedProductId = product.id;
   updateCheckButton();
@@ -130,6 +131,8 @@ function updateCheckButton() {
   const hasTypedIngredients = ingredientsTextarea.value.trim().length > 0;
 
   checkBtn.disabled = !(hasProductIngredients || hasTypedIngredients);
+
+  if (hasProductIngredients) checkBtn.style.margin = "10px auto";
 }
 
 ingredientsTextarea.addEventListener("input", updateCheckButton);
@@ -137,6 +140,7 @@ ingredientsTextarea.addEventListener("input", updateCheckButton);
 checkBtn.addEventListener("click", async () => {
   if (checkBtn.disabled) return;
   resultsContainer.style.opacity = "1";
+  resultsContainer.style.height = "fit-content";
   resultsContainer.style.margin = "30px 0";
 
   try {
@@ -144,6 +148,7 @@ checkBtn.addEventListener("click", async () => {
     if (selectedProductId) {
       const data = await fetchJSON(`${BASE_URL}/products/${selectedProductId}`);
       displayResults(data[0].ingredients);
+
       return;
     }
 
