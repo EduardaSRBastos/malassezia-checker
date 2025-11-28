@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<sub-flow name="get-brands-main" doc:id="c03ddb49-efac-423a-b4ea-e89b6b37203b" >
+		<flow-ref doc:name="get-products" doc:id="72b225ca-76d5-45c5-aaae-2f2b3a854b9d" name="get-products" />
+		<set-payload value="#[output application/json&#10;---&#10;payload.brands_en default payload.brands distinctBy $ filter !isEmpty($) orderBy $ map name: $]" doc:name="Response Output" doc:id="e27d97c3-0c7f-42ed-8ebe-03f2ccd9b85a" />
+	</sub-flow>
+</mule>

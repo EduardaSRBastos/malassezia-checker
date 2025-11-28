@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+    <http:listener-config name="malassezia-checker-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="malassezia-checker-config" api="resource::b409de3d-0ffa-4770-96e9-f41d8c787d4d:malassezia-checker:1.0.2:raml:zip:malassezia-checker.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <api-gateway:autodiscovery apiId="20604948" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="305ee73d-65ea-45ae-841a-7585598954e0" flowRef="malassezia-checker-main" />
+	<flow name="malassezia-checker-main">
+        <http:listener config-ref="malassezia-checker-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <logger level="INFO" doc:name="Start Log" doc:id="2133e834-1e6f-446e-bad8-e896b006e108" message="#[%dw 2.0&#xA;output application/json&#xA;---&#xA;START: message update {&#xA; case .payload -&gt;&#xA;      if ( payload is Object ) if ( sizeOf(payload as String default &quot;&quot;) &gt;= 200 ) (payload as String default &quot;&quot;)[0 to 199] ++ &quot;...&quot;&#xA;    else&#xA;      payload&#xA;      else if ( payload is Array ) if ( sizeOf(payload ) &gt;= 10 ) (payload[0 to 9]) ++ [&quot;...&quot;] else payload&#xA;      else&#xA;        payload&#xA;}]" />
+        <apikit:router config-ref="malassezia-checker-config" />
+        <logger level="INFO" doc:name="End Log" doc:id="575b22a0-b8f1-4dee-8e49-3cf8e8b8cd72" message="#[%dw 2.0&#xA;output application/json&#xA;---&#xA;END: message update {&#xA; case .payload -&gt;&#xA;      if ( payload is Object ) if ( sizeOf(payload as String default &quot;&quot;) &gt;= 200 ) (payload as String default &quot;&quot;)[0 to 199] ++ &quot;...&quot;&#xA;    else&#xA;      payload&#xA;      else if ( payload is Array ) if ( sizeOf(payload ) &gt;= 10 ) (payload[0 to 9]) ++ [&quot;...&quot;] else payload&#xA;      else&#xA;        payload&#xA;}]" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="malassezia-checker-console">
+        <http:listener config-ref="malassezia-checker-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="malassezia-checker-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="get:\malassezia-checker\brands:malassezia-checker-config">
+        <flow-ref doc:name="get-brands-main" doc:id="13a1707d-c3e2-40f5-a681-8198c79263c6" name="get-brands-main" />
+    </flow>
+    <flow name="get:\malassezia-checker\brands\(brandName)\products:malassezia-checker-config">
+        <set-variable value="#[attributes.uriParams.brandName]" doc:name="brandNameUriParam" doc:id="e2209bf1-f774-45e2-bb94-036f224e171f" variableName="brandNameUriParam" />
+        <flow-ref doc:name="get-brands-brandName-products-main" doc:id="6e134e94-3fd1-4a9b-8cb0-747665d4f067" name="get-brands-brandName-products-main" />
+    </flow>
+    <flow name="get:\malassezia-checker\products\(productId):malassezia-checker-config">
+        <set-variable value="#[attributes.uriParams.productId]" doc:name="productIdUriParam" doc:id="8c545004-0750-4d5d-bd58-7e689f8d99a2" variableName="productIdUriParam" />
+        <flow-ref doc:name="get-products-productId-main" doc:id="f12ebcf7-645b-4371-a21f-14be766b79ec" name="get-products-productId-main" />
+    </flow>
+    <flow name="post:\malassezia-checker\ingredients:application\json:malassezia-checker-config">
+        <flow-ref doc:name="post-ingredients-main" doc:id="4164c6eb-feb4-439b-84ae-9b702b20022a" name="post-ingredients-main" />
+    </flow>
+</mule>

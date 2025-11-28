@@ -1,0 +1,6 @@
+%dw 2.0
+
+type auto_7af8eaf5_e65b_4d02_8558_6c526997b7da_Output_Payload = Binary {"header": "false",
+"separator": ",",
+"ignoreemptyline": "true"}
+

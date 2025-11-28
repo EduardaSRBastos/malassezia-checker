@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Malassezia Checker</title>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Malassezia Checker Repository" />
+  <meta name="keywords" content="Malassezia Checker, Malassezia" />
+  <meta name="author" content="Eduarda Bastos" />
+  <meta name="theme-color" content="#71ad85" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+  <meta property="og:title" content="Malassezia Checker" />
+  <meta property="og:description" content="Malassezia Checker Repository" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://eduardasrbastos.github.io/malassezia-checker" />
+  <meta property="og:image" content="https://eduardasrbastos.github.io/malassezia-checker/assets/images/preview.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Malassezia Checker" />
+  <meta name="twitter:description" content="Malassezia Checker Repository" />
+  <meta name="twitter:image" content="https://eduardasrbastos.github.io/malassezia-checker/assets/images/preview.png" />
+
+  <link rel="canonical" href="https://eduardasrbastos.github.io/malassezia-checker" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <header role="banner">
+    <h1>Malassezia Checker</h1>
+  </header>
+
+  <main role="main">
+    <div class="grid-container">
+      <div class="ingredients-container">
+        <label for="ingredients-txtarea">Ingredients</label>
+        <textarea name="ingredients-txtarea" id="ingredients-txtarea" placeholder="Enter ingredients separated by comma"
+          maxlength="1000"></textarea>
+      </div>
+
+      <span class="separator">Or</span>
+
+      <div class="products-container">
+        <div class="brand-container">
+          <label for="brand-input">Brands</label>
+          <div class="custom-select">
+            <input type="text" id="brand-input" placeholder="Select or type brand">
+            <div id="brand-list" class="options-list"></div>
+          </div>
+        </div>
+
+        <div class="product-container">
+          <label for="product-select">Product</label>
+          <div class="custom-select">
+            <input type="text" id="product-input" placeholder="Select or type product" disabled
+              title="Please select a brand first">
+            <div id="product-list" class="options-list"></div>
+          </div>
+        </div>
+
+      </div>
+      <div class="ingredients-list-container">
+        <label for="ingredients-list">Ingredients</label>
+        <span class="ingredients-list"></span>
+      </div>
+
+      <button class="check-btn" disabled>Check</button>
+
+      <div class="results-container">
+        <label for="results">Results</label>
+        <span class="results"></span>
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    © <span id="year"></span>
+    <a href="https://github.com/EduardaSRBastos" target="_blank" rel="noopener noreferrer">Eduarda Bastos</a>. Licensed
+    under the MIT License.
+  </footer>
+</body>
+<script src="index.js"></script>
+
+</html>
