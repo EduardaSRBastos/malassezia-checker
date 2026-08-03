@@ -1,11 +1,15 @@
+import {
+  getBrands,
+  getProductsByBrand,
+  getProduct,
+  validateIngredients,
+} from "./api/js/malassezia-api.js";
+
 // Dynamic year
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("year").textContent = new Date().getFullYear();
   initApp();
 });
-
-const BASE_URL =
-  "https://malassezia-checker-qm2jwb.5sc6y6-1.usa-e2.cloudhub.io/api/malassezia-checker";
 
 const brandInput = document.getElementById("brand-input");
 const brandList = document.getElementById("brand-list");
@@ -13,33 +17,31 @@ const productInput = document.getElementById("product-input");
 const productList = document.getElementById("product-list");
 const ingredientsSpan = document.querySelector(".ingredients-list");
 const ingredientsListContainer = document.querySelector(
-  ".ingredients-list-container"
+  ".ingredients-list-container",
 );
 const resultsContainer = document.querySelector(".results-container");
 
 productInput.disabled = true;
 productInput.classList.add("disabled");
 
-// Get data from mulesoft API
-async function fetchJSON(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to fetch ${url}`);
-  return res.json();
-}
-
 async function loadBrands() {
-  const brands = await fetchJSON(`${BASE_URL}/brands`);
-  brandList.innerHTML = "";
+  try {
+    const brands = await getBrands();
 
-  brands.forEach((brand) => {
-    const div = document.createElement("div");
-    div.classList.add("option-item");
-    div.textContent = brand.name;
+    brandList.innerHTML = "";
 
-    div.addEventListener("click", () => selectBrand(brand.name));
+    brands.forEach((brand) => {
+      const div = document.createElement("div");
+      div.classList.add("option-item");
+      div.textContent = brand.name;
 
-    brandList.appendChild(div);
-  });
+      div.addEventListener("click", () => selectBrand(brand.name));
+
+      brandList.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Failed to load brands:", err);
+  }
 }
 
 async function loadProductsForBrand(brandName) {
@@ -50,9 +52,8 @@ async function loadProductsForBrand(brandName) {
   ingredientsSpan.textContent = "";
 
   try {
-    const products = await fetchJSON(
-      `${BASE_URL}/brands/${encodeURIComponent(brandName)}/products`
-    );
+    const products = await getProductsByBrand(brandName);
+
     products.forEach((product) => {
       const div = document.createElement("div");
       div.classList.add("option-item");
@@ -62,9 +63,10 @@ async function loadProductsForBrand(brandName) {
 
       productList.appendChild(div);
     });
+
     productInput.removeAttribute("title");
   } catch (err) {
-    console.error(err);
+    console.error("Failed to load products:", err);
   }
 }
 
@@ -89,11 +91,11 @@ function selectProduct(product) {
 
 // Brand input interactions
 brandInput.addEventListener("input", () =>
-  filterOptions(brandInput, brandList)
+  filterOptions(brandInput, brandList),
 );
 brandInput.addEventListener("focus", () => (brandList.style.display = "block"));
 brandInput.addEventListener("blur", () =>
-  setTimeout(() => (brandList.style.display = "none"), 100)
+  setTimeout(() => (brandList.style.display = "none"), 100),
 );
 
 // Product input interactions
@@ -107,10 +109,10 @@ productInput.addEventListener("mouseover", () => {
   else productInput.removeAttribute("title");
 });
 productInput.addEventListener("input", () =>
-  filterOptions(productInput, productList)
+  filterOptions(productInput, productList),
 );
 productInput.addEventListener("blur", () =>
-  setTimeout(() => (productList.style.display = "none"), 100)
+  setTimeout(() => (productList.style.display = "none"), 100),
 );
 
 function filterOptions(input, list) {
@@ -139,20 +141,24 @@ ingredientsTextarea.addEventListener("input", updateCheckButton);
 
 checkBtn.addEventListener("click", async () => {
   if (checkBtn.disabled) return;
+
   resultsContainer.style.opacity = "1";
   resultsContainer.style.height = "fit-content";
   resultsContainer.style.margin = "30px 0";
 
   try {
-    // Case 1: Product selected → GET /products/:productId
+    // Product selected
     if (selectedProductId) {
-      const data = await fetchJSON(`${BASE_URL}/products/${selectedProductId}`);
-      displayResults(data[0].ingredients);
+      const data = await getProduct(selectedProductId);
+
+      if (data.length > 0) {
+        displayResults(data[0].ingredients);
+      }
 
       return;
     }
 
-    // Case 2: Manual input → POST /ingredients
+    // Manual ingredients
     const ingredientsText = ingredientsTextarea.value.trim();
 
     const ingredientsArray = ingredientsText
@@ -160,16 +166,11 @@ checkBtn.addEventListener("click", async () => {
       .map((i) => i.trim())
       .filter((i) => i.length > 0);
 
-    const res = await fetch(`${BASE_URL}/ingredients`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ingredients: ingredientsArray }),
-    });
+    const validatedIngredients = await validateIngredients(ingredientsArray);
 
-    const result = await res.json();
-    displayResults(result.validatedIngredients);
+    displayResults(validatedIngredients);
   } catch (err) {
-    console.error(err);
+    console.error("Failed to check ingredients:", err);
   }
 });
 
@@ -186,18 +187,19 @@ function displayResults(ingredients) {
   const badOnes = ingredients.filter((item) => item.category);
 
   if (badOnes.length === 0) {
+    resultsSpan.style = "font-weight: bold;"
     resultsSpan.innerHTML = "No problematic ingredients found!";
     return;
   }
 
-  let html = `<p style="margin:0; font-size:17px;">Detected <strong style="font-size:24px;">${badOnes.length}</strong> potentially problematic ingredients.</p>`;
+  let html = `<p style="margin:0; font-size:17px; font-weight: bold;">Detected <strong style="font-size:24px;">${badOnes.length}</strong> potentially problematic ingredients.</p>`;
   html += "<table><tr><th>Name</th><th>Category</th></tr>";
 
   badOnes.forEach((item) => {
     const color = categoryColors[item.category] || "gray";
     html += `<tr>
                <td>
-                 <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${color};margin-right:5px;"></span>
+                 <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${color};margin-right:5px;font-weight:normal;"></span>
                  ${item.name}
                </td>
                <td style="background:${color};font-weight:bold;">${item.category}</td>
@@ -206,7 +208,12 @@ function displayResults(ingredients) {
 
   html += `
     <tr>
-      <td colspan="2">
+      <td colspan="2" style="
+      border-top: 2px solid white;
+      background: var(--main-color);
+      color: white;
+      padding: 10px 0;
+    ">
         <div style="display:flex; gap:10px;">
           <span><span class="legend-dot red"></span> Highly reactive for most individuals.</span>
           <span><span class="legend-dot orange"></span> Highly reactive under certain conditions.</span>
